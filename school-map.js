@@ -11,8 +11,9 @@ function initMap() {
     robos = robos.split("\n")
       .filter((line) => (line.length > 4) && (line !== '0,0'))
       .map((line) => {
-        let latlng = line.split(',');
-        return new google.maps.LatLng(latlng[0] * 1, latlng[1] * 1);
+        let lat = line.split(',')[0] * 1 || 0,
+            lng = line.split(',')[1] * 1 || 0;
+        return new google.maps.LatLng(lat, lng);
     });
     heatmap = new google.maps.visualization.HeatmapLayer({
       data: robos,
