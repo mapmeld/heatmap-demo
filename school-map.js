@@ -8,9 +8,11 @@ function initMap() {
   });
 
   fetch("robo_points.csv").then(res => res.text()).then((robos) => {
-    robos = robos.split("\n").filter((line) => line.length > 4).map((line) => {
-      let latlng = line.split(',');
-      return new google.maps.LatLng(line[0] * 1, line[1] * 1);
+    robos = robos.split("\n")
+      .filter((line) => (line.length > 4) && (line !== '0,0'))
+      .map((line) => {
+        let latlng = line.split(',');
+        return new google.maps.LatLng(latlng[0] * 1, latlng[1] * 1);
     });
     heatmap = new google.maps.visualization.HeatmapLayer({
       data: robos,
