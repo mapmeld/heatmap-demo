@@ -8,12 +8,12 @@ function initMap() {
   });
 
   fetch("robo_points.csv").then(res => res.text()).then((robos) => {
-    robos = robos.split("\n");
+    robos = robos.split("\n").filter((line) => line.length > 4).map((line) => {
+      let latlng = line.split(',');
+      return new google.maps.LatLng(line[0] * 1, line[1] * 1);
+    });
     heatmap = new google.maps.visualization.HeatmapLayer({
-      data: robos.filter((line) => line.length > 4).map((line) => {
-        let latlng = line.split(',');
-        return new google.maps.LatLng(line[0] * 1, line[1] * 1);
-      }),
+      data: robos,
       map: map
     });
   });
