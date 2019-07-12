@@ -13,7 +13,7 @@ function initMap() {
       .map((line) => {
         let lat = (line.split(',')[0] * 1) || 0,
             lng = (line.split(',')[1] * 1) || 0;
-        return [lat, lng]; //new google.maps.LatLng(lat, lng);
+        return new google.maps.LatLng(lat, lng);
     });
     //console.log(robos);
     heatmap = new google.maps.visualization.HeatmapLayer({
