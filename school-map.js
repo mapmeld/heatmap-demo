@@ -35,7 +35,8 @@ function initMap() {
                   : 'X'
               );
           new google.maps.Marker({
-            position: latlng
+            position: latlng,
+            map: map
           });
           // text marker plz
         });
