@@ -4,11 +4,74 @@ function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 10,
     center: {lat: 13.70034162, lng: -89.17501688},
-    streetViewControl: false
+    streetViewControl: false,
     //mapTypeId: 'satellite'
+    styles: [
+  {
+    "featureType": "landscape.man_made",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.natural.landcover",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.natural.terrain",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.sports_complex",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "simplified"
+      }
+    ]
+  }
+]
   });
 
-  fetch("robo_points.csv?r=2").then(res => res.text()).then((robos) => {
+  fetch("robo_points.csv?r=4").then(res => res.text()).then((robos) => {
     robos = robos.split("\n")
       .filter(line => (line.length > 4) && (line !== '0,0') && (line !== 'lat,lon,value'))
       .map((line) => {
