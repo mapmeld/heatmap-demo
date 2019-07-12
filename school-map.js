@@ -34,11 +34,13 @@ function initMap() {
                   (Math.round(second_graders / first_graders * 100) + '%')
                   : 'X'
               );
-          new google.maps.Marker({
-            position: latlng,
-            map: map
-          });
-          // text marker plz
+          if (first_graders && second_graders) {
+            new google.maps.Marker({
+              position: latlng,
+              map: map
+            });
+            // text marker plz
+          }
         });
     });
   });
