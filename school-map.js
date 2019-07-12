@@ -40,7 +40,7 @@ function initMap() {
     });
 
     let crv = document.createElement('canvas');
-        crv.width = 13;
+        crv.width = 18;
         crv.height = 12;
         ctx = crv.getContext('2d');
         ctx.font = '11px sans-serif';
@@ -61,17 +61,15 @@ function initMap() {
           if (first_graders && second_graders) {
             ctx.clearRect(0, 0, crv.width, crv.height);
             ctx.fillText(label, 0, 12);
-            console.log(crv.toDataURL())
             new google.maps.Marker({
               position: latlng,
               map: map,
               clickable: false,
               icon: {
                 url: crv.toDataURL(),
-                size: new google.maps.Size(24, 24)
+                size: new google.maps.Size(18, 12)
               }
             });
-            // text marker plz
           }
         });
     });
