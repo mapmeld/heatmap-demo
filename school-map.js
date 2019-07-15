@@ -140,11 +140,14 @@ function initMap() {
                 point = lookup[school];
             if (point && label) {
               ctx.clearRect(0, 0, crv.width, crv.height);
+              // red default
               let color = 'rgb(255, 0, 0, 0.3)';
-              if (label > 50) {
-                color = 'rgb(255, 255, 0, 0.3)';
-              } else if (label > 70) {
+              if (label > 70) {
+                // green
                 color = 'rgb(0, 255, 0, 0.5)';
+              } else if (label > 50) {
+                // yellow
+                color = 'rgb(255, 255, 0, 0.3)';
               }
               ctx.fillStyle = color;
               ctx.arc(9, 6, 9, 0, 2 * Math.PI, false);
