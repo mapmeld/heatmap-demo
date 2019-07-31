@@ -5,4 +5,20 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: arial, sans-serif;
+}
+#crimes {
+  position: fixed;
+  left: 0;
+  top: 120px;
+  background: #fff;
+  padding: 15px;
+  padding-top: 3px;
+}
+#school_rate {
+  text-transform: capitalize;
+}
+label {
+  display: block;
+  margin-bottom: 5px;
 }

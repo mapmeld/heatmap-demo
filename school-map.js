@@ -1,4 +1,5 @@
 var map, heatmap;
+var layers = {};
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
@@ -71,14 +72,17 @@ function initMap() {
 ]
   });
 
-  fetch("robo_points.csv?r=4").then(res => res.text()).then((robos) => {
-    robos = robos.split("\n")
+  fetch("robo_points.csv?r=4").then(res => res.text()).then((robofile) => {
+    robos = robofile.split("\n")
       .filter(line => (line.length > 4) && (line !== '0,0') && (line !== 'lat,lon,value'))
       .map((line) => {
         let lat = (line.split(',')[0] * 1) || 0,
             lng = (line.split(',')[1] * 1) || 0;
         return new google.maps.LatLng(lat, lng);
     });
+    layers['robos'] = robos;
+
+
     //console.log(robos);
     heatmap = new google.maps.visualization.HeatmapLayer({
       data: robos,
@@ -121,6 +125,7 @@ function initMap() {
       } else if (window.location.href.indexOf('2b') > -1) {
         grade = 'hs2_to_hs3';
       }
+      document.getElementById('school_rate').innerText = grade.replace(/\_/g, ' ');
 
       fetch("school_perf_" + grade + ".csv").then(res => res.text()).then((perfs) => {
         let crv = document.createElement('canvas');
@@ -167,11 +172,43 @@ function initMap() {
             }
           });
 
+        fetch("hurto_points.csv?v=2").then(res => res.text()).then((hurtofile) => {
+          layers['hurtos'] = hurtofile.split("\n")
+            .filter(line => (line.length > 4) && (line !== '0,0') && (line !== 'lat,lon,value'))
+            .map((line) => {
+              let lat = (line.split(',')[0] * 1) || 0,
+                  lng = (line.split(',')[1] * 1) || 0;
+              return new google.maps.LatLng(lat, lng);
+            });
+          layers['hurtos'] = layers['hurtos'].sort((a, b) => Math.random() - 0.5);
+          layers['hurtos'] = []; //layers['hurtos'].slice(0, 9000);
+
+          fetch("homicidio_points.csv?v=2").then(res => res.text()).then((homicidiofile) => {
+            layers['homicidios'] = homicidiofile.split("\n")
+              .filter(line => (line.length > 4) && (line !== '0,0') && (line !== 'lat,lon,value'))
+              .map((line) => {
+                let lat = (line.split(',')[0] * 1) || 0,
+                    lng = (line.split(',')[1] * 1) || 0;
+                return new google.maps.LatLng(lat, lng);
+              });
+          });
+        });
       });
     });
   });
 }
 
-function toggleHeatmap() {
+function toggleHeatmap () {
   heatmap.setMap(heatmap.getMap() ? null : map);
+}
+
+function changeCrimes (event) {
+  if (event.target.checked) {
+    console.log(event.target.value);
+    if (event.target.value === 'all') {
+      heatmap.setData(layers['hurtos'].concat(layers['robos']).concat(layers['homicidios']));
+    } else {
+      heatmap.setData(layers[event.target.value]);
+    }
+  }
 }
