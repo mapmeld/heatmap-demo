@@ -180,8 +180,8 @@ function initMap() {
                   lng = (line.split(',')[1] * 1) || 0;
               return new google.maps.LatLng(lat, lng);
             });
-          layers['hurtos'] = layers['hurtos'].sort((a, b) => Math.random() - 0.5);
-          layers['hurtos'] = []; //layers['hurtos'].slice(0, 9000);
+          //layers['hurtos'] = layers['hurtos'].sort((a, b) => Math.random() - 0.5);
+          layers['hurtos'] = layers['hurtos'].slice(0, 4000);
 
           fetch("homicidio_points.csv?v=2").then(res => res.text()).then((homicidiofile) => {
             layers['homicidios'] = homicidiofile.split("\n")

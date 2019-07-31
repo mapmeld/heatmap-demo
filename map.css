@@ -15,9 +15,6 @@ html, body {
   padding: 15px;
   padding-top: 3px;
 }
-#school_rate {
-  text-transform: capitalize;
-}
 label {
   display: block;
   margin-bottom: 5px;
