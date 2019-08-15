@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8">
     <title>Heatmaps</title>
-    <link rel="stylesheet" href="//unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
     <link rel="stylesheet" href="map.css"/>
   </head>
 
@@ -26,8 +25,9 @@
         <input type="radio" name="crime_type" value="homicidios" onclick="changeCrimes(event)"/> Homicidios
       </label>
     </div>
-    <script src="//unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
-    <script src="leaflet-heat.js"></script>
-    <script src="leaflet-map.js"></script>
+    <script src="school-map.js?r=3"></script>
+    <script async defer
+        src="//maps.googleapis.com/maps/api/js?key=AIzaSyCM5rmu5cgHp31_ykDbO-dqqCKGpfai_YM&libraries=visualization&callback=initMap">
+    </script>
   </body>
 </html>
