@@ -12,12 +12,9 @@ def sanitize(name):
         name = name[2:]
     return name
 
-def geocode_crimes(neighborhoods, crimes, csvwrite):
+def geocode_crimes(places, crimes, csvwrite):
     mi = 0
     missing = 0
-    places = []
-    for place in neighborhoods:
-        places.append(place)
 
     # ['CUENTA', 'DELITO', 'FECHA HECHO', 'HORA HECHO',
     #     'DEPARTAMENTO HECHO', 'MUNICIPIO HECHO', 'CANTON HECHO',
@@ -44,12 +41,16 @@ def geocode_crimes(neighborhoods, crimes, csvwrite):
                 muni_index = crime.index('MUNICIPIO')
             if 'CANTON HECHO' in crime:
                 cant_index = crime.index('CANTON HECHO')
+            elif 'CANTON  HECHO' in crime:
+                cant_index = crime.index('CANTON  HECHO')
             else:
                 cant_index = crime.index('CANTON')
             if 'CASERIO HECHO' in crime:
                 case_index = crime.index('CASERIO HECHO')
-            else:
+            elif 'CASERIO' in crime:
                 case_index = crime.index('CASERIO')
+            else:
+                case_index = -1
         else:
             dept = crime[dept_index]
             muni = crime[muni_index]
@@ -69,6 +70,8 @@ def geocode_crimes(neighborhoods, crimes, csvwrite):
                 # 'COD_MUN2', 'Municipio', 'NOMBRE', 'Tipo_Terr']
                 ni += 1
                 if ni > 1:
+                    if place[0].strip() == '' or place[1].strip() == '':
+                        continue
                     if sanitize(place[3]) == sanitize(dept):
                         found_dept = True
                         if sanitize(place[6]) == sanitize(muni):
@@ -90,7 +93,7 @@ def geocode_crimes(neighborhoods, crimes, csvwrite):
                                     potential_places.append([place[0], place[1]])
                                 # else:
                                 #     print(caserio + 'vs ' + place[7])
-                            elif place[0] != '' and place[1] != '':
+                            else:
                                 # dept/muni is best detail for now
                                 relevant_places.append([place[0], place[1]])
             last_message = ''
@@ -130,20 +133,19 @@ def geocode_crimes(neighborhoods, crimes, csvwrite):
             #print(','.join([dept, muni, canton, caserio]))
     print(str(missing) + ' / ' + str(mi))
 
+neighborhoods = []
 with open('Neighborhood_points.csv') as places_csv:
-    neighborhoods = csv.reader(places_csv, delimiter=',')
+    for place in csv.reader(places_csv, delimiter=','):
+        neighborhoods.append(place)
+
     for year in [2010, 2011, 2014, 2015]:
         year = str(year)
         for crime in ['HURTOS', 'ROBOS', 'HOMICIDIOS', 'EXTORSIONES']:
             print(year + ' / ' + crime)
-            if year == '2010':
+            if year == '2015' and (crime == 'HURTOS' or crime == 'ROBOS'):
                 continue
-            try:
-                with open('/Users/ndoiron404/Downloads/elsal/EFICACIA ' + year + '/' + crime + ' ' + year + '-Table 1.csv') as crimes_csv:
-                    crimes = csv.reader(crimes_csv, delimiter=',')
-                    opcsv = open('geocoded_' + crime.lower() + '_' + year + '.csv', 'w')
-                    geocode_crimes(neighborhoods, crimes, csv.writer(opcsv, delimiter=',', quoting=csv.QUOTE_MINIMAL))
-                    opcsv.close()
-            except Exception as e:
-                print(e)
-                print('missing file')
+            with open('/Users/ndoiron404/Downloads/elsal/EFICACIA ' + year + '/' + crime + ' ' + year + '-Table 1.csv') as crimes_csv:
+                crimes = csv.reader(crimes_csv, delimiter=',')
+                opcsv = open('geocoded_' + crime.lower() + '_' + year + '.csv', 'w')
+                geocode_crimes(neighborhoods, crimes, csv.writer(opcsv, delimiter=',', quoting=csv.QUOTE_MINIMAL))
+                opcsv.close()
