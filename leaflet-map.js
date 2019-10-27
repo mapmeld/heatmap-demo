@@ -7,6 +7,7 @@ var crv = document.createElement('canvas');
 var ctx = crv.getContext('2d');
     ctx.font = '11px sans-serif';
     ctx.fillStyle = '#000';
+var imgLabels = {};
 
 map = L.map(document.getElementById('map'))
   .setView([ 13.70034162, -89.17501688], 10);
@@ -58,24 +59,28 @@ fetch("robo_points.csv").then(res => res.text()).then((robofile) => {
               label = Math.round(continued / original * 100),
               point = lookup[school];
           if (point && label) {
-            ctx.clearRect(0, 0, crv.width, crv.height);
-            // red default
-            let color = 'rgb(255, 0, 0, 0.3)';
-            if (label > 70) {
-              // green
-              color = 'rgb(0, 255, 0, 0.5)';
-            } else if (label > 50) {
-              // yellow
-              color = 'rgb(255, 255, 0, 0.3)';
+            if (!imgLabels[label]) {
+              ctx.clearRect(0, 0, crv.width, crv.height);
+              // red default
+              let color = 'rgb(255, 0, 0, 0.3)';
+              if (label > 70) {
+                // green
+                color = 'rgb(0, 255, 0, 0.5)';
+              } else if (label > 50) {
+                // yellow
+                color = 'rgb(255, 255, 0, 0.3)';
+              }
+              ctx.fillStyle = color;
+              ctx.arc(9, 6, 9, 0, 2 * Math.PI, false);
+              ctx.fill();
+              ctx.fillStyle = '#000';
+              let xval = Math.floor((crv.width - ctx.measureText(label).width) / 2);
+              ctx.fillText(label, xval, 10);
+              imgLabels[label] = crv.toDataURL();
             }
-            ctx.fillStyle = color;
-            ctx.arc(9, 6, 9, 0, 2 * Math.PI, false);
-            ctx.fill();
-            ctx.fillStyle = '#000';
-            let xval = Math.floor((crv.width - ctx.measureText(label).width) / 2);
-            ctx.fillText(label, xval, 10);
+
             let myIcon = L.icon({
-            	iconUrl: crv.toDataURL(),
+            	iconUrl: imgLabels[label],
             	iconSize:     [22, 18],
             	iconAnchor:   [11, 9]
             });
