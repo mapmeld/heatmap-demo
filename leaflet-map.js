@@ -10,7 +10,7 @@ var ctx = crv.getContext('2d');
 var imgLabels = {};
 
 map = L.map(document.getElementById('map'))
-  .setView([ 13.70034162, -89.17501688], 10);
+  .setView([ 13.70034162, -89.17501688], 12);
 map.attributionControl.setPrefix('');
 L.tileLayer('//tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png').addTo(map);
 
